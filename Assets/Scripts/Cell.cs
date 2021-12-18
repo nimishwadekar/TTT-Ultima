@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Cell2D : MonoBehaviour, ICell
+public class Cell : MonoBehaviour
 {
-    public Action<Tuple<int, int>> InsertAction;
+    public Action<IComparable> InsertAction;
 
-    public Tuple<int, int> location;
+    public IComparable location;
     public GameObject player1Piece, player2Piece;
 
     bool filled = false;

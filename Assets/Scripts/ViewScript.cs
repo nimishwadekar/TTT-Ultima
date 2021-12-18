@@ -8,15 +8,33 @@ public class ViewScript : MonoBehaviour
     public Transform verticalAxis, verticalPole, horizontalAxis, horizontalPole;
 
     Vector2 touchStart;
+    Vector3 baseVerticalAxisPosition, baseVerticalAxisRotation, baseHorizontalAxisPosition, baseHorizontalAxisRotation;
 
     void Start()
     {
-
+        baseVerticalAxisPosition = verticalAxis.position;
+        baseVerticalAxisRotation = verticalAxis.rotation.eulerAngles;
+        baseHorizontalAxisPosition = horizontalAxis.position;
+        baseHorizontalAxisRotation = horizontalAxis.rotation.eulerAngles;
     }
-    
+
     void FixedUpdate()
     {
-        /*if (Input.touchCount > 0)
+        MobileTouch();
+        //EditorTouch();
+    }
+
+    public void BeginViewing()
+    {
+        verticalAxis.position = baseVerticalAxisPosition;
+        verticalAxis.rotation = Quaternion.Euler(baseVerticalAxisRotation);
+        horizontalAxis.position = baseHorizontalAxisPosition;
+        horizontalAxis.rotation = Quaternion.Euler(baseHorizontalAxisRotation);
+    }
+
+    void MobileTouch()
+    {
+        if (Input.touchCount > 0)
         {
             if (Input.touches[0].phase == TouchPhase.Began || Input.touches[0].phase == TouchPhase.Stationary)
             {
@@ -31,8 +49,11 @@ public class ViewScript : MonoBehaviour
                 verticalAxis.rotation = Quaternion.Euler(verticalAxis.rotation.eulerAngles + transform.rotation.eulerAngles - oldRot);
                 horizontalAxis.rotation = Quaternion.Euler(horizontalAxis.rotation.eulerAngles + transform.rotation.eulerAngles - oldRot);
             }
-        }*/
+        }
+    }
 
+    void EditorTouch()
+    {
         Vector2 mousePos = Input.mousePosition;
         if (Input.GetMouseButtonDown(0))
         {
