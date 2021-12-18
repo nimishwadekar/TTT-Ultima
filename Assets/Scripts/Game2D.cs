@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum PlayerNumber
+{
+    Player1,
+    Player2
+}
+
 public class Game2D : MonoBehaviour
 {
     public GameObject cell;
@@ -32,11 +38,12 @@ public class Game2D : MonoBehaviour
             {
                 GameObject newCell = Instantiate(cell);
                 newCell.transform.position = location + new Vector3(lb + i, 0, lb + j);
+                newCell.GetComponent<Cell2D>().location = new System.Tuple<int, int>(i, j);
             }
         }
     }
 
-    public void Select()
+    public void SelectMode()
     {
         viewScript.enabled = false;
         selectButton.gameObject.SetActive(false);

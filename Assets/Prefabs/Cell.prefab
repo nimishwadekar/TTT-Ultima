@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5029446654441616802}
   - component: {fileID: 5029446654441616813}
   - component: {fileID: 5029446654441616812}
+  - component: {fileID: -1083137859756814308}
   m_Layer: 0
   m_Name: Cell
   m_TagString: Untagged
@@ -90,8 +91,22 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5029446654441616815}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-1083137859756814308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5029446654441616815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53acab4c14856e46a602046b761f5ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player1Piece: {fileID: 3319909493307641343, guid: 60afe411ba310364d8d82a826ea3cb6c, type: 3}
+  player2Piece: {fileID: 6895255748625003298, guid: 2a646e1fa902b604890da6532ee87180, type: 3}
