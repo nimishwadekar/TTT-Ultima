@@ -8,6 +8,8 @@ public class Game3D : Game2D
     public float layerMoveTime;
     public Button downButton, upButton;
 
+    float cellAlpha;
+
     GameObject[][][] cells;
     int topLayer, dimension;
 
@@ -17,6 +19,8 @@ public class Game3D : Game2D
 
         cameraBasePosition = Camera.main.transform.position;
         cameraBaseRotation = Camera.main.transform.rotation.eulerAngles;
+
+        cellAlpha = 50f / 255;
 
         dimension = dim;
         playerTurn = PlayerNumber.Player1;
@@ -78,6 +82,9 @@ public class Game3D : Game2D
             {
                 Transform cellTransform = cells[topLayer][j][k].transform;
                 cellTransform.DOMove(cellTransform.position + neg * new Vector3(dimension, 0, 0), layerMoveTime);
+                Renderer[] renderers = cellTransform.GetComponentsInChildren<Renderer>();
+                renderers[0].material.DOFade(down ? 0 : cellAlpha, layerMoveTime);
+                if(renderers.Length > 1) renderers[1].material.DOFade(down ? 0 : 1, layerMoveTime);
             }
         }
         yield return new WaitForSeconds(layerMoveTime);

@@ -68,6 +68,14 @@ public class TTT3D : ITTT
 
     bool Check3DWin(Vec3 location, PlayerNumber player)
     {
-        return false;
+        bool[] won = { true, true, true, true };
+        for (int i = 0; i < dimension; i++)
+        {
+            won[0] &= board[i, i, i] == player;
+            won[1] &= board[dimension - 1 - i, i, i] == player;
+            won[2] &= board[i, dimension - 1 - i, i] == player;
+            won[3] &= board[i, i, dimension - 1 - i] == player;
+        }
+        return won[0] || won[1] || won[2] || won[3];
     }
 }
