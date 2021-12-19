@@ -8,7 +8,12 @@ public enum WinState
     Draw
 }
 
-public class TTT2D
+public interface ITTT
+{
+    WinState Insert(IVec location, PlayerNumber player);
+}
+
+public class TTT2D : ITTT
 {
     public readonly int dimension;
 
@@ -29,7 +34,12 @@ public class TTT2D
         maxMoves = dim * dim;
     }
 
-    public WinState Insert(Tuple<int, int> location, PlayerNumber player)
+    public WinState Insert(IVec location, PlayerNumber player)
+    {
+        return Insert(location as Vec2, player);
+    }
+
+    WinState Insert(Vec2 location, PlayerNumber player)
     {
         board[location.Item1, location.Item2] = player;
         moves += 1;
@@ -42,26 +52,26 @@ public class TTT2D
         return WinState.Continue;
     }
 
-    bool CheckRowWin(Tuple<int, int> lastInsert, PlayerNumber player)
+    bool CheckRowWin(Vec2 lastInsert, PlayerNumber player)
     {
         for (int i = 0; i < dimension; i++) if (board[lastInsert.Item1, i] != player) return false;
         return true;
     }
 
-    bool CheckColumnWin(Tuple<int, int> lastInsert, PlayerNumber player)
+    bool CheckColumnWin(Vec2 lastInsert, PlayerNumber player)
     {
         for (int i = 0; i < dimension; i++) if (board[i, lastInsert.Item2] != player) return false;
         return true;
     }
 
-    bool CheckLeftDiagonalWin(Tuple<int, int> lastInsert, PlayerNumber player)
+    bool CheckLeftDiagonalWin(Vec2 lastInsert, PlayerNumber player)
     {
         if (lastInsert.Item1 != lastInsert.Item2) return false;
         for (int i = 0; i < dimension; i++) if (board[i, i] != player) return false;
         return true;
     }
 
-    bool CheckRightDiagonalWin(Tuple<int, int> lastInsert, PlayerNumber player)
+    bool CheckRightDiagonalWin(Vec2 lastInsert, PlayerNumber player)
     {
         if (lastInsert.Item1 + lastInsert.Item2 != dimension - 1) return false;
         for (int i = 0; i < dimension; i++) if (board[i, dimension - i - 1] != player) return false;

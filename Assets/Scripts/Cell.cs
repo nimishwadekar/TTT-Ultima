@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    public Action<IComparable> InsertAction;
+    public Action<IVec> InsertAction;
 
-    public IComparable location;
+    public IVec location;
     public GameObject player1Piece, player2Piece;
 
     bool filled = false;

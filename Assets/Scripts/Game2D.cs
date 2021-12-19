@@ -16,19 +16,19 @@ public enum PlayerNumber
 public class Game2D : MonoBehaviour
 {
     public GameObject cell;
-    public GameObject player1, player2;
 
     public ViewScript viewScript;
     public SelectScript selectScript;
-    public Button selectButton, okButton;
+    public GameObject viewComponents;
+    public Button okButton;
     public GameObject winPanel;
     public Text winText;
 
     public float cameraMoveTime;
 
-    TTT2D ttt;
-    PlayerNumber playerTurn;
-    Vector3 cameraBasePosition, cameraBaseRotation;
+    protected ITTT ttt;
+    protected PlayerNumber playerTurn;
+    protected Vector3 cameraBasePosition, cameraBaseRotation;
 
     void Awake()
     {
@@ -45,20 +45,20 @@ public class Game2D : MonoBehaviour
         int dim = 3;
         playerTurn = PlayerNumber.Player1;
         ttt = new TTT2D(dim);
-        CreateBoard(Vector3.zero, dim);
+        CreateBoard(dim);
     }
 
-    public void CreateBoard(Vector3 location, int dimension)
+    void CreateBoard(int dimension)
     {
-        int lb = Mathf.RoundToInt(dimension / 2.0f) - dimension;
-        for(int i = 0; i < dimension; i++)
+        float lb = (dimension + 1) / 2.0f - dimension;
+        for (int i = 0; i < dimension; i++)
         {
             for(int j = 0; j < dimension; j++)
             {
                 GameObject newCell = Instantiate(cell);
-                newCell.transform.position = location + new Vector3(lb + i, 0, lb + j);
+                newCell.transform.position = new Vector3(lb + i, 0, lb + j);
                 Cell cell2D = newCell.GetComponent<Cell>();
-                cell2D.location = new Tuple<int, int>(i, j);
+                cell2D.location = new Vec2(i, j);
                 cell2D.InsertAction += MakeMove;
             }
         }
@@ -67,7 +67,7 @@ public class Game2D : MonoBehaviour
     public void SelectMode()
     {
         viewScript.enabled = false;
-        selectButton.gameObject.SetActive(false);
+        viewComponents.SetActive(false);
         selectScript.enabled = true;
         selectScript.BeginSelection(new Vector3(0, 5, 0));
     }
@@ -82,13 +82,12 @@ public class Game2D : MonoBehaviour
         yield return new WaitForSeconds(cameraMoveTime);
 
         viewScript.enabled = true;
-        selectButton.gameObject.SetActive(true);
+        viewComponents.SetActive(true);
     }
 
-    void MakeMove(IComparable loc)
+    protected virtual void MakeMove(IVec loc)
     {
-        Tuple<int, int> location = loc as Tuple<int, int>;
-        WinState state = ttt.Insert(location, playerTurn);
+        WinState state = ttt.Insert(loc, playerTurn);
         if (state == WinState.Continue)
         {
             playerTurn = playerTurn == PlayerNumber.Player1 ? PlayerNumber.Player2 : PlayerNumber.Player1;

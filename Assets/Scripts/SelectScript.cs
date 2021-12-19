@@ -31,6 +31,11 @@ public class SelectScript : MonoBehaviour
         {
             if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
             {
+                if (!hit.collider.CompareTag("Cell"))
+                {
+                    return;
+                }
+
                 Cell cell = hit.collider.GetComponent<Cell>();
                 if(!cell.isFilled())
                 {

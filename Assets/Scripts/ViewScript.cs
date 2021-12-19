@@ -9,6 +9,7 @@ public class ViewScript : MonoBehaviour
 
     Vector2 touchStart;
     Vector3 baseVerticalAxisPosition, baseVerticalAxisRotation, baseHorizontalAxisPosition, baseHorizontalAxisRotation;
+    bool shouldRotate;
 
     void Start()
     {
@@ -16,12 +17,13 @@ public class ViewScript : MonoBehaviour
         baseVerticalAxisRotation = verticalAxis.rotation.eulerAngles;
         baseHorizontalAxisPosition = horizontalAxis.position;
         baseHorizontalAxisRotation = horizontalAxis.rotation.eulerAngles;
+        shouldRotate = false;
     }
 
     void FixedUpdate()
     {
-        MobileTouch();
-        //EditorTouch();
+        //MobileTouch();
+        EditorTouch();
     }
 
     public void BeginViewing()
@@ -36,11 +38,26 @@ public class ViewScript : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
+            if(Input.touches[0].phase == TouchPhase.Ended || Input.touches[0].phase == TouchPhase.Canceled)
+            {
+                shouldRotate = false;
+            }
             if (Input.touches[0].phase == TouchPhase.Began || Input.touches[0].phase == TouchPhase.Stationary)
             {
+                if(Input.touches[0].phase == TouchPhase.Began)
+                {
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.touches[0].position), out RaycastHit hit))
+                    {
+                        if (hit.collider.CompareTag("Cell"))
+                        {
+                            shouldRotate = true;
+                        }
+                    }
+                }
+
                 touchStart = Input.touches[0].position;
             }
-            else if (Input.touches[0].phase == TouchPhase.Moved)
+            else if (shouldRotate && Input.touches[0].phase == TouchPhase.Moved)
             {
                 Vector2 dir = (touchStart - Input.touches[0].position) / Screen.width;
                 Vector3 oldRot = transform.rotation.eulerAngles;
@@ -54,12 +71,25 @@ public class ViewScript : MonoBehaviour
 
     void EditorTouch()
     {
+        if(Input.GetMouseButtonUp(0))
+        {
+            shouldRotate = false;
+        }
+
         Vector2 mousePos = Input.mousePosition;
         if (Input.GetMouseButtonDown(0))
         {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+            {
+                if (hit.collider.CompareTag("Cell"))
+                {
+                    shouldRotate = true;
+                }
+            }
             touchStart = mousePos;
         }
-        if (Input.GetMouseButton(0) && touchStart != mousePos)
+
+        if (shouldRotate && Input.GetMouseButton(0) && touchStart != mousePos)
         {
             int xDir = (touchStart - mousePos).x > 0 ? 1 : -1;
             int yDir = (touchStart - mousePos).y > 0 ? 1 : -1;
