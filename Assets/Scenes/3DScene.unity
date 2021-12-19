@@ -398,7 +398,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &602904043
 RectTransform:
   m_ObjectHideFlags: 0
@@ -526,7 +526,7 @@ GameObject:
   - component: {fileID: 876835726}
   - component: {fileID: 876835725}
   m_Layer: 5
-  m_Name: Cycle2DButton
+  m_Name: UpButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,7 +598,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2129435941}
         m_TargetAssemblyTypeName: Game3D, Assembly-CSharp
-        m_MethodName: Cycle2DButton
+        m_MethodName: UpButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -926,7 +926,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CYCLE 2D
+  m_Text: UP
 --- !u!222 &1081120087
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1803,7 +1803,9 @@ MonoBehaviour:
   winPanel: {fileID: 440370082}
   winText: {fileID: 99255924}
   cameraMoveTime: 1
-  rotateTime: 1
+  layerMoveTime: 0.5
+  downButton: {fileID: 602904044}
+  upButton: {fileID: 876835725}
 --- !u!4 &2129435942
 Transform:
   m_ObjectHideFlags: 0

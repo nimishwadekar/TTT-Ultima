@@ -1,12 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game3D : Game2D
 {
-    public float rotateTime;
+    public float layerMoveTime;
+    public Button downButton, upButton;
 
     GameObject[][][] cells;
     int topLayer, dimension;
@@ -22,6 +22,7 @@ public class Game3D : Game2D
         playerTurn = PlayerNumber.Player1;
         ttt = new TTT3D(dim);
         topLayer = dim - 1;
+        upButton.gameObject.SetActive(false);
         CreateBoard(dim);
     }
 
@@ -52,59 +53,48 @@ public class Game3D : Game2D
         }
     }
 
-    public void Cycle2DButton()
+    public void UpButton()
     {
-        StartCoroutine(CycleTTT());
+        StartCoroutine(LayerLerp(false));
     }
 
-    IEnumerator CycleTTT()
+    public void DownButton()
     {
+        StartCoroutine(LayerLerp(true));
+    }
+
+    IEnumerator LayerLerp(bool down)
+    {
+        int neg = down ? 1 : -1;
+
         viewScript.enabled = false;
         viewComponents.SetActive(false);
 
-        for (int j = 0; j < dimension; j++)
-        {
-            for (int k = 0; k < dimension; k++)
-            {
-                Transform cellTransform = cells[topLayer][j][k].transform;
-                cellTransform.DOMove(cellTransform.position + new Vector3(dimension, 0, 0), rotateTime / 3);
-            }
-        }
-        yield return new WaitForSeconds(rotateTime / 3);
-
-        for(int i = 0; i < dimension; i++)
-        {
-            for (int j = 0; j < dimension; j++)
-            {
-                for (int k = 0; k < dimension; k++)
-                {
-                    Transform cellTransform = cells[i][j][k].transform;
-                    if(i == topLayer)
-                    {
-                        cellTransform.DOMove(cellTransform.position - new Vector3(0, dimension - 1, 0), rotateTime / 3);
-                    }
-                    else
-                    {
-                        cellTransform.DOMove(cellTransform.position + new Vector3(0, 1, 0), rotateTime / 3);
-                    }
-                }
-            }
-        }
-        yield return new WaitForSeconds(rotateTime / 3);
+        if (!down) topLayer += 1;
 
         for (int j = 0; j < dimension; j++)
         {
             for (int k = 0; k < dimension; k++)
             {
                 Transform cellTransform = cells[topLayer][j][k].transform;
-                cellTransform.DOMove(cellTransform.position - new Vector3(dimension, 0, 0), rotateTime / 3);
+                cellTransform.DOMove(cellTransform.position + neg * new Vector3(dimension, 0, 0), layerMoveTime);
             }
         }
-        yield return new WaitForSeconds(rotateTime / 3);
-
-        topLayer = topLayer == 0 ? dimension - 1 : topLayer - 1;
+        yield return new WaitForSeconds(layerMoveTime);
 
         viewComponents.SetActive(true);
         viewScript.enabled = true;
+
+        if(down)
+        {
+            topLayer -= 1;
+            if (topLayer == dimension - 2) upButton.gameObject.SetActive(true);
+            else if (topLayer == 0) downButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            if (topLayer == 1) downButton.gameObject.SetActive(true);
+            else if (topLayer == dimension - 1) upButton.gameObject.SetActive(false);
+        }
     }
 }
